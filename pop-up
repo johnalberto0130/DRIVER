@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Incorporación | Únete</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2=family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Scripts (React, Babel & GSAP) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0b0b0d;
+            --gold-primary: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --text-light: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(212, 175, 55, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #16161a 0%, #0b0b0d 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* الخلفية المضيئة الدائرية */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, rgba(0,0,0,0) 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #root {
+            width: 100%;
+            max-width: 750px;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* كارت التصميم الزجاجي الفخم */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            padding: 45px;
+        }
+
+        /* نافذة الشروط المنبثقة */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-card {
+            max-width: 580px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-x {
+            position: absolute;
+            top: 20px; right: 20px;
+            color: #ff4d4d;
+            font-size: 22px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .close-x:hover { transform: scale(1.2); }
+
+        .modal-title { 
+            color: var(--gold-primary); 
+            margin-bottom: 25px; 
+            font-size: 22px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        
+        .requirements-list {
+            text-align: left;
+            display: inline-block;
+            list-style: none;
+            margin-bottom: 35px;
+        }
+        .requirements-list li {
+            margin: 16px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        /* أيقونة الجرس */
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .notice-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--gold-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-primary);
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .important-title {
+            color: var(--gold-primary);
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .text-body {
+            line-height: 1.9;
+            font-size: 15px;
+            text-align: justify;
+            text-align-last: center;
+            color: #d1d1d6;
+        }
+
+        /* صندوق الخطوات */
+        .steps-box {
+            margin: 25px 0;
+            padding: 22px;
+            background: rgba(212, 175, 55, 0.04);
+            border-radius: 16px;
+            border-left: 4px solid var(--gold-primary);
+            text-align: left;
+            text-align-last: left;
+        }
+
+        .signature {
+            margin-top: 35px;
+            color: var(--gold-primary);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* الأزرار الفاخرة */
+        .cta-container { display: flex; justify-content: center; margin-top: 35px; }
+        
+        .btn-gold {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, #b8860b 100%);
+            color: #0b0b0d;
+            border: none;
+            padding: 16px 45px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 22px var(--gold-glow);
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-gold:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 0 35px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, #fff 0%, var(--gold-primary) 100%);
+        }
+
+        /* متجاوب مع الهواتف */
+        @media (max-width: 600px) {
+            .glass-card { padding: 30px 20px; }
+            .text-body { font-size: 14px; line-height: 1.8; }
+            .btn-gold { padding: 14px 35px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const App = () => {
+            const [showModal, setShowModal] = useState(true);
+            const [renderMain, setRenderMain] = useState(false);
+            
+            const modalRef = useRef(null);
+            const mainCardRef = useRef(null);
+
+            useEffect(() => {
+                // أنيميشن دخول نافذة الشروط عند التحميل أول مرة
+                if (showModal && modalRef.current) {
+                    gsap.fromTo(modalRef.current, 
+                        { opacity: 0, scale: 0.85, y: 30 },
+                        { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "power4.out" }
+                    );
+                }
+            }, [showModal]);
+
+            useEffect(() => {
+                // أنيميشن صعود صفحة الإشعار بعد إغلاق المودال
+                if (renderMain && mainCardRef.current) {
+                    gsap.fromTo(mainCardRef.current,
+                        { opacity: 0, y: 40 },
+                        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+                    );
+                }
+            }, [renderMain]);
+
+            const handleCloseModal = () => {
+                // أنيميشن خروج نافذة الشروط بسلاسة
+                gsap.to(modalRef.current, {
+                    opacity: 0, scale: 0.9, duration: 0.4, ease: "power2.in", onComplete: () => {
+                        setShowModal(false);
+                        setRenderMain(true); // تفعيل ظهور الكارت الرئيسي
+                    }
+                });
+            };
+
+            return (
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    {/* نافذة الشروط المنبثقة */}
+                    {showModal && (
+                        <div className="modal-overlay">
+                            <div className="glass-card modal-card" ref={modalRef}>
+                                <button className="close-x" onClick={handleCloseModal}>✕</button>
+                                <h2 className="modal-title">Requisitos de Selección</h2>
+                                <ul className="requirements-list">
+                                    <li><span>✔️</span> Nacionalidad europea</li>
+                                    <li><span>✔️</span> Licencia de conducir vigente (preferible +2 años)</li>
+                                    <li><span>✔️</span> Edad: +19 años</li>
+                                    <li><span>✔️</span> Edad: -65 años</li>
+                                    <li><span>✔️</span> Idioma: Español (Inglés deseable)</li>
+                                </ul>
+                                <div>
+                                    <button className="btn-gold" onClick={handleCloseModal}>LO ENTIENDO</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* الكارت الرئيسي - Aviso Importante */}
+                    {renderMain && (
+                        <div className="glass-card" ref={mainCardRef}>
+                            
+                            {/* إرجاع أيقونة الجرس الفاخرة المفقودة */}
+                            <div className="icon-container">
+                                <div className="notice-icon">🔔</div>
+                            </div>
+
+                            <div className="important-title">Aviso Importante</div>
+                            
+                            <div className="text-body">
+                                <p>Hola,</p>
+                                <p>Nos complace su interés en formar parte de nuestro equipo.</p>
+                                <br />
+                                <p>El proceso de incorporación es sencillo y directo. Dado que el número de vacantes es limitado, le recomendamos completar su registro en el momento que le resulte conveniente.</p>
+                                
+                                <div className="steps-box">
+                                    <strong style={{color: 'var(--gold-primary)'}}>Pasos a seguir:</strong><br /><br />
+                                    <p style={{marginBottom: '8px'}}>• Al hacer clic en el botón "ÚNETE A NOSOTROS", será redirigido a la página de registro.</p>
+                                    <p style={{marginBottom: '8px'}}>• Allí deberá completar algunos datos básicos y aceptar los términos y políticas correspondientes.</p>
+                                    <p>• Posteriormente, podrá agendar una entrevista informativa en línea (Zoom) con uno de nuestros asesores.</p>
+                                </div>
+
+                                <p>Una vez finalizado el registro, nuestro equipo se pondrá en contacto con usted para coordinar una visita a la sede más cercana, donde se realizará una prueba de conducción (<strong>Test Drive</strong>) con el fin de evaluar su experiencia y conocer mejor sus habilidades.</p>
+                                <br />
+                                <p style={{fontSize: '13px', opacity: 0.7}}>Tenga en cuenta que, en esta etapa, todo el proceso se gestiona de manera digital.</p>
+                                
+                                <p className="signature">Atentamente,<br />El equipo</p>
+                            </div>
+
+                            <div className="cta-container">
+                                <button className="btn-gold" onClick={() => window.location.href='index.html'}>
+                                    <span>ÚNETE A NOSOTROS</span>
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
