@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DriveElite — Join Europe's Elite Driver Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-l:#E8C96A;--gold-d:#8B6B1E;--glow:rgba(201,168,76,.28);
+  --dark:#060608;--d2:#0E0E12;--d3:#161620;--d4:#1E1E2A;--d5:#26263A;
+  --tg:#E0D0A8;--tm:#8A7A5A;--tw:#F0EDE6;
+  --green:#2ECC71;--red:#E74C3C;--gray:#44445A;--grayL:#7A7A9A;
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--tg);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+#cur,#curR{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;border-radius:50%;transform:translate(-50%,-50%)}
+#cur{width:8px;height:8px;background:var(--gold);transition:width .2s,height .2s,background .2s}
+#curR{width:34px;height:34px;border:1px solid var(--gold);opacity:.55;transition:width .15s,height .15s,opacity .15s}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 52px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(6,6,8,.92) 0%,transparent 100%)}
+.logo{font-family:'Cinzel',serif;font-weight:700;font-size:20px;color:var(--gold);letter-spacing:5px;text-transform:uppercase;text-decoration:none}
+.logo em{color:var(--tw);font-style:normal;font-weight:400}
+.nav-pill{font-size:12px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:7px 16px;background:rgba(201,168,76,.07);backdrop-filter:blur(12px);display:flex;align-items:center;gap:7px}
+.nav-pill::before{content:'';width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,.5)}50%{box-shadow:0 0 0 5px rgba(46,204,113,0)}}
+#heroScroll{height:500vh;position:relative}
+#heroSticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.panel{position:absolute;inset:0;display:flex;align-items:center;opacity:0;transition:opacity .05s}
+.panel.active{opacity:1}
+.pBg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.08);transition:transform 7s cubic-bezier(.2,.8,.2,1)}
+.panel.active .pBg{transform:scale(1)}
+.pOvr{position:absolute;inset:0;background:linear-gradient(120deg,rgba(6,6,8,.88) 0%,rgba(6,6,8,.55) 60%,rgba(6,6,8,.65) 100%)}
+.pOvr::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,8,1) 0%,transparent 45%)}
+.pAccent{position:absolute;top:0;right:72px;width:1px;height:55%;background:linear-gradient(to bottom,transparent,var(--gold),transparent);opacity:.35}
+.pContent{position:relative;z-index:2;max-width:860px;padding:0 52px}
+.pTag{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:22px;opacity:0;transform:translateY(18px)}
+.pTag::before{content:'';display:block;width:36px;height:1px;background:var(--gold)}
+.pTitle{font-family:'Cinzel',serif;font-size:clamp(46px,7.5vw,100px);font-weight:700;line-height:1.04;color:var(--tw);margin-bottom:18px;opacity:0;transform:translateY(28px)}
+.pTitle .g{color:var(--gold);font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic}
+.pSub{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2.2vw,24px);font-weight:400;color:var(--tg);max-width:520px;line-height:1.6;margin-bottom:40px;opacity:0;transform:translateY(18px)}
+.pFeats{display:flex;gap:28px;margin-bottom:40px;flex-wrap:wrap;opacity:0;transform:translateY(18px)}
+.pFeat{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:var(--tg)}
+.pFeat::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0}
+.joinBtn{display:inline-flex;align-items:center;gap:12px;font-family:'Cinzel',serif;font-size:13.5px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--dark);background:linear-gradient(135deg,var(--gold-l) 0%,var(--gold) 100%);border:none;padding:17px 38px;cursor:pointer;position:relative;overflow:hidden;opacity:0;transform:translateY(18px);transition:box-shadow .35s}
+.joinBtn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transition:left .55s}
+.joinBtn:hover::before{left:110%}
+.joinBtn:hover{box-shadow:0 8px 36px var(--glow)}
+.joinBtn svg{flex-shrink:0;transition:transform .3s}
+.joinBtn:hover svg{transform:translateX(5px)}
+.pDots{position:absolute;bottom:44px;right:52px;z-index:2;display:flex;flex-direction:column;gap:7px}
+.pDot{width:4px;height:4px;border-radius:2px;background:var(--gray);transition:all .45s}
+.pDot.on{height:22px;background:var(--gold)}
+.scrollCue{position:absolute;bottom:44px;left:52px;z-index:2;display:flex;align-items:center;gap:10px}
+.scrollCue span{font-size:11.5px;letter-spacing:3.5px;text-transform:uppercase;color:var(--tm)}
+.scrollLine{width:44px;height:1px;background:linear-gradient(to right,var(--gold),transparent);animation:sla 2.5s ease infinite}
+@keyframes sla{0%,100%{transform:scaleX(1);opacity:.9}50%{transform:scaleX(.5);opacity:.4}}
+/* FORM */
+#formModal{position:fixed;inset:0;z-index:5000;background:var(--dark);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .45s}
+#formModal.open{opacity:1;pointer-events:all}
+.fInner{min-height:100vh;display:flex;flex-direction:column;padding-bottom:70px}
+.fHead{display:flex;align-items:center;justify-content:space-between;padding:26px 52px;border-bottom:1px solid rgba(201,168,76,.1)}
+.fLogo{font-family:'Cinzel',serif;font-weight:700;font-size:17px;color:var(--gold);letter-spacing:5px}
+.fClose{background:none;border:1px solid var(--gray);color:var(--grayL);width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.fClose:hover{border-color:var(--gold);color:var(--gold)}
+/* 6-step progress */
+.fProg{padding:36px 52px 0;background:var(--dark)}
+.pSteps{display:flex;align-items:flex-start;max-width:860px;margin:0 auto}
+.pStep{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.pStep:not(:last-child)::after{content:'';position:absolute;top:15px;left:calc(50% + 16px);right:calc(-50% + 16px);height:1px;background:var(--d5)}
+.pStep.done:not(:last-child)::after,.pStep.on:not(:last-child)::after{background:var(--gold-d)}
+.sCirc{width:30px;height:30px;border:1px solid var(--d5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;font-family:'Cinzel',serif;color:var(--grayL);background:var(--d2);position:relative;z-index:1;transition:all .4s}
+.pStep.on .sCirc{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1);box-shadow:0 0 18px rgba(201,168,76,.28)}
+.pStep.done .sCirc{border-color:var(--gold-d);background:var(--gold-d);color:var(--dark)}
+.sLbl{margin-top:7px;font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--gray);white-space:nowrap;transition:color .4s}
+.pStep.on .sLbl{color:var(--gold)}
+.pStep.done .sLbl{color:var(--tm)}
+/* body */
+.fBody{flex:1;display:flex;flex-direction:column;max-width:720px;width:100%;margin:52px auto 0;padding:0 52px}
+.fStep{display:none;flex-direction:column;animation:sIn .38s ease forwards}
+.fStep.active{display:flex}
+@keyframes sIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+.gLine{width:56px;height:1px;background:linear-gradient(to right,var(--gold),transparent);margin-bottom:18px}
+.sHead{font-family:'Cinzel',serif;font-size:clamp(22px,4vw,34px);font-weight:700;color:var(--tw);margin-bottom:7px;line-height:1.2}
+.sHead .acc{color:var(--gold)}
+.sDesc{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--tg);margin-bottom:38px;line-height:1.6;max-width:580px}
+/* fields */
+.fg{margin-bottom:26px}
+.fl{display:block;font-size:12.5px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--tm);margin-bottom:9px}
+.fi{width:100%;background:var(--d3);border:1px solid var(--d5);border-bottom:1px solid var(--gold-d);color:var(--tw);font-family:'Jost',sans-serif;font-size:16px;font-weight:400;padding:13px 18px;outline:none;transition:all .3s;-webkit-appearance:none;border-radius:0}
+.fi:focus{border-color:var(--gold);background:var(--d4);box-shadow:inset 0 0 24px rgba(201,168,76,.04)}
+.fi.err{border-color:var(--red)}
+.fi.ok-field{border-color:var(--green)!important;background:rgba(46,204,113,.04)!important}
+select.fi option{background:var(--d3);color:var(--tw)}
+.ferr{font-size:12px;color:var(--red);margin-top:6px;display:none}
+.ferr.show{display:block}
+/* CITY TOAST */
+#cityToast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.88);z-index:9999;pointer-events:none;opacity:0;text-align:center}
+.cityToastInner{background:rgba(6,6,8,.96);border:1px solid rgba(46,204,113,.38);padding:26px 48px;backdrop-filter:blur(20px);box-shadow:0 0 60px rgba(46,204,113,.16),0 0 120px rgba(46,204,113,.06)}
+.cityToastCheck{width:48px;height:48px;border:1px solid rgba(46,204,113,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--green)}
+.cityToastText{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--green);letter-spacing:.3px;line-height:1.6}
+/* LICENSE CARDS */
+.licGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.licCard{background:var(--d3);border:1px solid var(--d5);padding:22px 20px 18px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.licCard::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gold);opacity:0;transition:opacity .3s}
+.licCard.sel{border-color:var(--gold);background:rgba(201,168,76,.055)}
+.licCard.sel::before{opacity:1}
+.licCard:hover:not(.sel){border-color:var(--gold-d);background:var(--d4)}
+.licLetter{font-family:'Cinzel',serif;font-size:38px;font-weight:900;color:var(--gold-d);line-height:1;margin-bottom:6px;transition:color .3s}
+.licCard.sel .licLetter{color:var(--gold)}
+.licType{font-size:12.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--tm);margin-bottom:10px;transition:color .3s}
+.licCard.sel .licType{color:var(--gold-l)}
+.licJobs{list-style:none}
+.licJobs li{font-size:13.5px;color:var(--grayL);padding:2.5px 0 2.5px 14px;position:relative;line-height:1.5}
+.licJobs li::before{content:'›';position:absolute;left:0;color:var(--gold-d)}
+.licCard.sel .licJobs li{color:var(--tg)}
+.licChk{position:absolute;top:14px;right:14px;width:20px;height:20px;border:1px solid var(--d5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .3s}
+.licCard.sel .licChk{background:var(--gold);border-color:var(--gold);color:var(--dark)}
+.licSalary{display:inline-flex;align-items:center;gap:5px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 9px;background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.25);color:var(--green);margin-top:11px}
+/* QUIZ */
+.qBox{background:var(--d3);border:1px solid var(--d5);padding:26px 24px;margin-bottom:22px}
+.qNum{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-d);margin-bottom:10px;font-weight:500}
+.qText{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--tw);line-height:1.55;margin-bottom:22px}
+.qOpts{display:flex;flex-direction:column;gap:9px}
+.qOpt{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;background:var(--d4);border:1px solid var(--d5);cursor:pointer;transition:all .3s;font-size:13.5px;color:var(--tg);line-height:1.5}
+.qOpt:hover:not(.ans){border-color:var(--gold-d);background:var(--d5)}
+.qOpt.ans{cursor:default;pointer-events:none}
+.qOpt.ok{border-color:var(--green);background:rgba(46,204,113,.07);color:var(--green)}
+.qOpt.no{border-color:var(--red);background:rgba(231,76,60,.07);color:var(--red);animation:shk .45s ease}
+@keyframes shk{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-5px)}30%,60%,90%{transform:translateX(5px)}}
+.oLetter{font-family:'Cinzel',serif;font-size:12px;font-weight:700;min-width:22px;height:22px;border:1px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:.7;flex-shrink:0;margin-top:1px}
+#focusAlert{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--gold);text-shadow:0 0 40px var(--glow);pointer-events:none;z-index:9998;opacity:0;letter-spacing:5px;white-space:nowrap}
+/* BOOKING */
+.bookGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:26px}
+.bookCol{display:flex;flex-direction:column;gap:9px}
+.bookDay{font-family:'Cinzel',serif;font-size:12.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-align:center;padding:11px 6px;background:rgba(201,168,76,.055);border:1px solid rgba(201,168,76,.15)}
+.bookSlot{padding:13px 8px;background:var(--d3);border:1px solid var(--d5);text-align:center;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;gap:3px}
+.bookSlot:hover:not(.sel){border-color:var(--gold-d);background:var(--d4)}
+.bookSlot.sel{border-color:var(--green);background:rgba(46,204,113,.07)}
+.bTime{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--tw);transition:color .3s}
+.bookSlot.sel .bTime{color:var(--green)}
+.bPer{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--tm)}
+/* ===== BENEFITS & TERMS ===== */
+.btWrap{display:flex;flex-direction:column;gap:34px}
+.btSection{display:flex;flex-direction:column;gap:13px}
+.btSLabel{display:inline-flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.btSLabel::before{content:'';display:block;width:28px;height:1px;background:var(--gold)}
+.btCards{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.btCard{background:var(--d3);border:1px solid var(--d5);border-left:2px solid var(--gold-d);padding:20px 18px 16px;position:relative;transition:border-color .3s,background .3s;overflow:hidden}
+.btCard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--gold-d),transparent);opacity:.35}
+.btCard:hover{background:var(--d4);border-left-color:var(--gold)}
+.btIcon{font-size:22px;margin-bottom:10px;line-height:1;display:flex;}
+.btTitle{font-family:'Cinzel',serif;font-size:13.5px;font-weight:700;letter-spacing:1.8px;color:var(--gold-l);text-transform:uppercase;margin-bottom:8px}
+.btText{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;color:var(--tg);line-height:1.65}
+/* divider */
+.btDivider{height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.2),transparent)}
+/* terms */
+.tList{display:flex;flex-direction:column;gap:9px}
+.tItem{display:flex;align-items:flex-start;gap:14px;padding:15px 18px;background:var(--d3);border:1px solid var(--d5);transition:border-color .3s}
+.tItem:hover{border-color:rgba(201,168,76,.22)}
+.tBullet{width:22px;height:22px;border:1px solid var(--gold-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.tBulletIn{width:6px;height:6px;background:var(--gold-d);border-radius:50%}
+.tItemHead{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:1.8px;color:var(--tw);text-transform:uppercase;margin-bottom:4px}
+.tItemSub{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;color:var(--tg);line-height:1.55}
+/* note */
+.btNote{background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.12);padding:16px 20px;display:flex;align-items:flex-start;gap:12px}
+.btNote svg{color:var(--gold);flex-shrink:0;margin-top:3px}
+.btNote p{font-family:'Cormorant Garamond',serif;font-size:13.5px;font-style:italic;color:var(--tm);line-height:1.72}
+/* VERIFY */
+.vWrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 0 20px}
+.vIcon{width:96px;height:96px;border:1px solid rgba(201,168,76,.28);display:flex;align-items:center;justify-content:center;margin-bottom:28px;position:relative;flex-shrink:0}
+.vIcon::before,.vIcon::after{content:'';position:absolute;border:1px solid rgba(201,168,76,.12)}
+.vIcon::before{inset:-9px}.vIcon::after{inset:-18px}
+.vIcon svg{color:var(--gold)}
+.vTitle{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--tw);margin-bottom:10px}
+.vText{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--tg);max-width:500px;line-height:1.65;margin-bottom:44px}
+.vBtn{display:inline-flex;align-items:center;gap:13px;font-family:'Cinzel',serif;font-size:13px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#3ABFB7 0%,#2196A8 100%);border:none;padding:19px 40px;cursor:pointer;text-decoration:none;box-shadow:0 5px 28px rgba(58,191,183,.28);transition:all .3s}
+.vBtn:hover{box-shadow:0 9px 42px rgba(58,191,183,.44);transform:translateY(-2px)}
+.secBadges{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap;justify-content:center}
+.secBadge{display:flex;align-items:center;gap:7px;font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:var(--tm)}
+/* NAV BUTTONS */
+.fNav{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:28px;border-top:1px solid rgba(201,168,76,.08)}
+.bBack{display:inline-flex;align-items:center;gap:9px;font-family:'Jost',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--grayL);background:var(--d3);border:1px solid var(--gray);padding:13px 26px;cursor:pointer;transition:all .3s}
+.bBack:hover:not(:disabled){border-color:var(--grayL);color:var(--tw)}
+.bBack:disabled{opacity:.3;cursor:not-allowed}
+.bNext{display:inline-flex;align-items:center;gap:9px;font-family:'Jost',sans-serif;font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#4CAF50 0%,#2E7D32 100%);border:none;padding:13px 30px;cursor:pointer;transition:all .35s;box-shadow:0 4px 22px rgba(76,175,80,.22)}
+.bNext:hover:not(:disabled){box-shadow:0 7px 30px rgba(76,175,80,.42);transform:translateY(-1px)}
+.bNext:disabled{opacity:.35;cursor:not-allowed;transform:none}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.022;pointer-events:none;z-index:99990}
+@media(max-width:720px){
+  nav{padding:18px 22px}.pContent{padding:0 22px}
+  .licGrid{grid-template-columns:1fr}.btCards{grid-template-columns:1fr}
+  .bookGrid{grid-template-columns:1fr}.fBody{padding:0 22px}
+  .fHead{padding:18px 22px}.fProg{padding:22px 22px 0}
+  .sLbl{display:none}body{cursor:auto}#cur,#curR{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="curR"></div>
+<div id="focusAlert">✦ Try to Focus ✦</div>
+
+<div id="cityToast">
+  <div class="cityToastInner">
+    <div class="cityToastCheck">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="cityToastText">Great — we are available<br>in your city too!</div>
+  </div>
+</div>
+
+<nav>
+  <a class="logo" href="#">Drive<em>Elite</em></a>
+  <div class="nav-pill">💳 Weekly Payments</div>
+</nav>
+
+<div id="heroScroll">
+  <div id="heroSticky">
+    <div class="panel" id="p0">
+      <div class="pBg" style="background-image:url('https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=1920&q=88&auto=format&fit=crop')"></div>
+      <div class="pOvr"></div><div class="pAccent"></div>
+      <div class="pContent">
+        <div class="pTag">Europe's Premier Driver Network</div>
+        <h1 class="pTitle">Your Road.<br>Your <span class="g">Rules.</span></h1>
+        <p class="pSub">Join thousands of professional drivers who turned their licence into a thriving weekly-paid career across the European Union.</p>
+        <div class="pFeats"><div class="pFeat">Weekly Payments</div><div class="pFeat">Flexible Hours</div><div class="pFeat">Full Insurance</div></div>
+        <button class="joinBtn" onclick="openForm()">Join Us Now <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+      <div class="scrollCue"><span>Scroll</span><div class="scrollLine"></div></div>
+    </div>
+    <div class="panel" id="p1">
+      <div class="pBg" style="background-image:url('https://images.unsplash.com/photo-1580274455191-1c62238fa1c6?w=1920&q=88&auto=format&fit=crop')"></div>
+      <div class="pOvr"></div><div class="pAccent"></div>
+      <div class="pContent">
+        <div class="pTag">License B · Private &amp; Delivery</div>
+        <h1 class="pTitle">Drive.<br>Earn. <span class="g">Thrive.</span></h1>
+        <p class="pSub">From VIP chauffeur to last-mile delivery — your Category B licence unlocks every urban opportunity.</p>
+        <div class="pFeats"><div class="pFeat">€750–€1,500 / week</div><div class="pFeat">500+ Active Routes</div></div>
+        <button class="joinBtn" onclick="openForm()">Apply Now <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+    </div>
+    <div class="panel" id="p2">
+      <div class="pBg" style="background-image:url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1920&q=88&auto=format&fit=crop')"></div>
+      <div class="pOvr"></div><div class="pAccent"></div>
+      <div class="pContent">
+        <div class="pTag">License C · Heavy Goods</div>
+        <h1 class="pTitle">Move <span class="g">the</span><br>World.</h1>
+        <p class="pSub">Long-haul. Cross-border. Category C drivers are the backbone of European commerce — and we pay accordingly.</p>
+        <div class="pFeats"><div class="pFeat">International Routes</div><div class="pFeat">€1,200–€2,400 / week</div></div>
+        <button class="joinBtn" onclick="openForm()">Start Today <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+    </div>
+    <div class="panel" id="p3">
+      <div class="pBg" style="background-image:url('https://images.unsplash.com/photo-1544620347460-35ea80023baf?w=1920&q=88&auto=format&fit=crop')"></div>
+      <div class="pOvr"></div><div class="pAccent"></div>
+      <div class="pContent">
+        <div class="pTag">License D · Passenger Transport</div>
+        <h1 class="pTitle">Lead <span class="g">Every</span><br>Journey.</h1>
+        <p class="pSub">Tourist coaches, intercity buses, charter shuttles — carry passengers across Europe with pride and purpose.</p>
+        <div class="pFeats"><div class="pFeat">Tourist Routes</div><div class="pFeat">Premium Vehicles</div></div>
+        <button class="joinBtn" onclick="openForm()">Join the Fleet <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+    </div>
+    <div class="panel" id="p4">
+      <div class="pBg" style="background-image:url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=88&auto=format&fit=crop')"></div>
+      <div class="pOvr"></div><div class="pAccent"></div>
+      <div class="pContent" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+        <div class="pTag" style="margin-left:auto;margin-right:auto">Ready to Begin?</div>
+        <h1 class="pTitle" style="text-align:center">One Application.<br><span class="g">Endless Roads.</span></h1>
+        <p class="pSub" style="text-align:center;margin-left:auto;margin-right:auto">5 minutes. Zero risk. Join 12,000+ professional drivers across Europe — paid every single week.</p>
+        <button class="joinBtn" onclick="openForm()">Begin Application <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+    </div>
+    <div class="pDots" id="pDots">
+      <div class="pDot on"></div><div class="pDot"></div><div class="pDot"></div><div class="pDot"></div><div class="pDot"></div>
+    </div>
+  </div>
+</div>
+
+<div id="formModal">
+  <div class="fInner">
+
+    <div class="fHead">
+      <div class="fLogo">DRIVE ELITE</div>
+      <button class="fClose" onclick="closeForm()">✕</button>
+    </div>
+
+    <div class="fProg">
+      <div class="pSteps" id="pSteps">
+        <div class="pStep on"  data-s="1"><div class="sCirc">01</div><span class="sLbl">Personal</span></div>
+        <div class="pStep"     data-s="2"><div class="sCirc">02</div><span class="sLbl">License</span></div>
+        <div class="pStep"     data-s="3"><div class="sCirc">03</div><span class="sLbl">Assessment</span></div>
+        <div class="pStep"     data-s="4"><div class="sCirc">04</div><span class="sLbl">Schedule</span></div>
+        <div class="pStep"     data-s="5"><div class="sCirc">05</div><span class="sLbl">Benefits</span></div>
+        <div class="pStep"     data-s="6"><div class="sCirc">06</div><span class="sLbl">Verify</span></div>
+      </div>
+    </div>
+
+    <div class="fBody">
+
+      <div class="fStep active" id="s1">
+        <div class="gLine"></div>
+        <h2 class="sHead">Personal <span class="acc">Information</span></h2>
+        <p class="sDesc">Tell us who you are — every field is required to proceed with your application.</p>
+        <div class="fg">
+          <label class="fl" for="fName">Full Name</label>
+          <input class="fi" id="fName" type="text" placeholder="e.g. Alexandre Moreau" autocomplete="name">
+          <div class="ferr" id="eN">Please enter your full name (minimum 3 characters).</div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="fAge">Age</label>
+          <input class="fi" id="fAge" type="text" placeholder="25" inputmode="numeric" maxlength="2" autocomplete="off">
+          <div class="ferr" id="eA">Age must be a number between 18 and 65.</div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="fEmail">Email Address</label>
+          <input class="fi" id="fEmail" type="email" placeholder="name@example.com" inputmode="email" autocomplete="email">
+          <div class="ferr" id="eE">Please enter a valid email address (name@domain.com).</div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="fCountry">Country of Residence</label>
+          <select class="fi" id="fCountry">
+            <option value="">— Select your country —</option>
+            <optgroup label="Schengen Area">
+              <option>Austria</option><option>Belgium</option><option>Czech Republic</option>
+              <option>Denmark</option><option>Estonia</option><option>Finland</option>
+              <option>France</option><option>Germany</option><option>Greece</option>
+              <option>Hungary</option><option>Iceland</option><option>Italy</option>
+              <option>Latvia</option><option>Liechtenstein</option><option>Lithuania</option>
+              <option>Luxembourg</option><option>Malta</option><option>Netherlands</option>
+              <option>Norway</option><option>Poland</option><option>Portugal</option>
+              <option>Slovakia</option><option>Slovenia</option><option>Spain</option>
+              <option>Sweden</option><option>Switzerland</option>
+            </optgroup>
+            <optgroup label="Other European Countries">
+              <option>Albania</option><option>Bosnia and Herzegovina</option>
+              <option>Bulgaria</option><option>Croatia</option><option>Cyprus</option>
+              <option>Ireland</option><option>Kosovo</option><option>Moldova</option>
+              <option>Monaco</option><option>Montenegro</option><option>North Macedonia</option>
+              <option>Romania</option><option>San Marino</option><option>Serbia</option>
+              <option>Turkey</option><option>Ukraine</option><option>United Kingdom</option>
+            </optgroup>
+          </select>
+          <div class="ferr" id="eCo">Please select your country of residence.</div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="fCity">City</label>
+          <input class="fi" id="fCity" type="text" placeholder="e.g. Milan, Barcelona, Lisbon…" autocomplete="off">
+          <div class="ferr" id="eCi">Please enter your city (minimum 2 characters).</div>
+        </div>
+        <div class="fNav">
+          <button class="bBack" disabled>← Back</button>
+          <button class="bNext" onclick="v1()">Next →</button>
+        </div>
+      </div>
+
+      <div class="fStep" id="s2">
+        <div class="gLine"></div>
+        <h2 class="sHead">Your <span class="acc">License</span></h2>
+        <p class="sDesc">Select every license category you hold — in Europe, multiple categories are perfectly valid and more options mean more earning potential.</p>
+        <div class="licGrid">
+          <div class="licCard" data-l="A" onclick="toggleLic(this)">
+            <div class="licChk">✓</div>
+            <div class="licLetter">A</div>
+            <div class="licType">Motorcycle &amp; Scooter</div>
+            <ul class="licJobs"><li>Private courier &amp; parcel delivery</li><li>Food &amp; express delivery</li><li>Motorcycle taxi services</li><li>Urgent document delivery</li></ul>
+            <div class="licSalary">From €600 / week</div>
+          </div>
+          <div class="licCard" data-l="B" onclick="toggleLic(this)">
+            <div class="licChk">✓</div>
+            <div class="licLetter">B</div>
+            <div class="licType">Car &amp; Light Vehicle</div>
+            <ul class="licJobs"><li>Private chauffeur &amp; VIP service</li><li>Rideshare &amp; airport transfers</li><li>E-commerce last-mile delivery</li><li>Medical transport assistance</li></ul>
+            <div class="licSalary">From €750 / week</div>
+          </div>
+          <div class="licCard" data-l="C" onclick="toggleLic(this)">
+            <div class="licChk">✓</div>
+            <div class="licLetter">C</div>
+            <div class="licType">Heavy Goods Vehicle</div>
+            <ul class="licJobs"><li>Long-haul freight transport</li><li>Cross-border logistics</li><li>Construction materials delivery</li><li>Refrigerated goods transport</li></ul>
+            <div class="licSalary">From €1,200 / week</div>
+          </div>
+          <div class="licCard" data-l="D" onclick="toggleLic(this)">
+            <div class="licChk">✓</div>
+            <div class="licLetter">D</div>
+            <div class="licType">Passenger Bus &amp; Coach</div>
+            <ul class="licJobs"><li>Tourist coach driving</li><li>Intercity passenger service</li><li>School &amp; shuttle transport</li><li>Charter &amp; event transport</li></ul>
+            <div class="licSalary">From €1,000 / week</div>
+          </div>
+        </div>
+        <div class="ferr" id="eL" style="font-size:13px">Please select at least one license category.</div>
+        <div class="fNav">
+          <button class="bBack" onclick="goStep(1)">← Back</button>
+          <button class="bNext" onclick="v2()">Next →</button>
+        </div>
+      </div>
+
+      <div class="fStep" id="s3">
+        <div class="gLine"></div>
+        <h2 class="sHead">Skills <span class="acc">Assessment</span></h2>
+        <p class="sDesc">Two real-world scenario questions tailored to your selected license type. Read carefully — only one answer is correct.</p>
+        <div id="quizBox"></div>
+        <div class="fNav">
+          <button class="bBack" onclick="goStep(2)">← Back</button>
+          <button class="bNext" id="qNext" onclick="v3()" disabled>Next →</button>
+        </div>
+      </div>
+
+      <div class="fStep" id="s4">
+        <div class="gLine"></div>
+        <h2 class="sHead">Schedule Your <span class="acc">Interview</span></h2>
+        <p class="sDesc">Choose the time that works best for you. We'll have a short Zoom video call with one of our team members — just to get to know you better before you join us. No preparation needed.</p>
+        <div class="bookGrid">
+          <div class="bookCol">
+            <div class="bookDay">Monday</div>
+            <div class="bookSlot" data-slot="mon-1015" onclick="selSlot(this)"><div class="bTime">10:15</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="mon-1145" onclick="selSlot(this)"><div class="bTime">11:45</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="mon-1615" onclick="selSlot(this)"><div class="bTime">16:15</div><div class="bPer">Afternoon</div></div>
+            <div class="bookSlot" data-slot="mon-1745" onclick="selSlot(this)"><div class="bTime">17:45</div><div class="bPer">Afternoon</div></div>
+          </div>
+          <div class="bookCol">
+            <div class="bookDay">Wednesday</div>
+            <div class="bookSlot" data-slot="wed-1015" onclick="selSlot(this)"><div class="bTime">10:15</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="wed-1145" onclick="selSlot(this)"><div class="bTime">11:45</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="wed-1615" onclick="selSlot(this)"><div class="bTime">16:15</div><div class="bPer">Afternoon</div></div>
+            <div class="bookSlot" data-slot="wed-1745" onclick="selSlot(this)"><div class="bTime">17:45</div><div class="bPer">Afternoon</div></div>
+          </div>
+          <div class="bookCol">
+            <div class="bookDay">Friday</div>
+            <div class="bookSlot" data-slot="fri-1015" onclick="selSlot(this)"><div class="bTime">10:15</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="fri-1145" onclick="selSlot(this)"><div class="bTime">11:45</div><div class="bPer">Morning</div></div>
+            <div class="bookSlot" data-slot="fri-1615" onclick="selSlot(this)"><div class="bTime">16:15</div><div class="bPer">Afternoon</div></div>
+            <div class="bookSlot" data-slot="fri-1745" onclick="selSlot(this)"><div class="bTime">17:45</div><div class="bPer">Afternoon</div></div>
+          </div>
+        </div>
+        <div class="ferr" id="eB" style="font-size:13px">Please select an available time slot to continue.</div>
+        <div class="fNav">
+          <button class="bBack" onclick="goStep(3)">← Back</button>
+          <button class="bNext" onclick="v4()">Next →</button>
+        </div>
+      </div>
+
+      <div class="fStep" id="s5">
+        <div class="gLine"></div>
+        <h2 class="sHead">What We <span class="acc">Offer</span> &amp; What We Ask</h2>
+        <p class="sDesc">Before you complete your application, take a moment to understand everything that comes with joining DriveElite — the privileges we extend to every driver in our network, and the professional standards we uphold together across the European Union.</p>
+
+        <div class="btWrap">
+
+          <div class="btSection">
+            <div class="btSLabel">What We Bring to the Table</div>
+            <div class="btCards">
+
+              <div class="btCard">
+                <div class="btIcon">
+                  <svg class="gsap-icon car-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+                    <rect x="3" y="11" width="18" height="8" rx="2"></rect>
+                    <path d="M19 11l-2.4-5.6A2 2 0 0 0 14.7 4H9.3a2 2 0 0 0-1.9 1.4L5 11"></path>
+                    <circle cx="7" cy="19" r="2"></circle>
+                    <circle cx="17" cy="19" r="2"></circle>
+                  </svg>
+                </div>
+                <div class="btTitle">Your Vehicle, Fully Provided</div>
+                <div class="btText">We supply the right vehicle for your licence category — whether that's a sleek passenger car, a high-capacity delivery scooter, a fully equipped freight truck, or a modern touring coach. You drive. We cover the wheels.</div>
+              </div>
+
+              <div class="btCard">
+                <div class="btIcon">
+                  <svg class="gsap-icon cal-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
+                <div class="btTitle">Designed for Your Lifestyle</div>
+                <div class="btText">Choose shifts that suit your rhythm. Morning routes, evening runs, part-time or full-time — your schedule is yours to shape. We work around your life, not the other way around.</div>
+              </div>
+
+              <div class="btCard">
+                <div class="btIcon">
+                  <svg class="gsap-icon money-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                    <circle cx="12" cy="12" r="2"></circle>
+                    <path d="M6 12h.01M18 12h.01"></path>
+                  </svg>
+                </div>
+                <div class="btTitle">Weekly Pay + Performance Rewards</div>
+                <div class="btText">Reliable income deposited every Friday. Base salary plus performance-based commissions and loyalty bonuses that grow the longer you stay with us. The harder you drive, the more you earn — simple, fair, transparent.</div>
+              </div>
+
+              <div class="btCard">
+                <div class="btIcon">
+                  <svg class="gsap-icon shield-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);">
+                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div class="btTitle">Full Support &amp; Coverage</div>
+                <div class="btText">24/7 driver support line, comprehensive insurance on every vehicle, roadside assistance across all EU territories, and a dedicated account manager to handle the admin so you can focus on the road ahead.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="btDivider"></div>
+
+          <div class="btSection">
+            <div class="btSLabel">Our Professional Standards</div>
+            <div class="tList">
+
+              <div class="tItem">
+                <div class="tBullet"><div class="tBulletIn"></div></div>
+                <div>
+                  <div class="tItemHead">Minimum Age — 18 Years</div>
+                  <div class="tItemSub">All applicants must be at least 18 years of age at the time of registration, in full compliance with European driving regulations across all member states.</div>
+                </div>
+              </div>
+
+              <div class="tItem">
+                <div class="tBullet"><div class="tBulletIn"></div></div>
+                <div>
+                  <div class="tItemHead">Valid European Driving Licence</div>
+                  <div class="tItemSub">You must hold a current, non-suspended driving licence issued by an EU member state or a country recognised under international equivalency agreements. Expired or restricted licences are not accepted.</div>
+                </div>
+              </div>
+
+              <div class="tItem">
+                <div class="tBullet"><div class="tBulletIn"></div></div>
+                <div>
+                  <div class="tItemHead">Two Years of Experience — Preferred for C &amp; D</div>
+                  <div class="tItemSub">While Category A and B positions are open to newly licensed drivers, HGV freight and passenger transport roles require a minimum of two years of documented professional driving experience, ensuring the safety of all road users.</div>
+                </div>
+              </div>
+
+              <div class="tItem">
+                <div class="tBullet"><div class="tBulletIn"></div></div>
+                <div>
+                  <div class="tItemHead">Commitment to Conduct &amp; Legal Compliance</div>
+                  <div class="tItemSub">Every DriveElite driver is expected to adhere to European labour regulations, national road traffic laws, and our Code of Professional Conduct — upholding the highest standards of safety, punctuality, and client respect at all times.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="btNote">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>By proceeding to identity verification, you acknowledge that you have read and understood the conditions above, and confirm that all information provided throughout this application is accurate and truthful. DriveElite reserves the right to verify all submitted details prior to onboarding.</p>
+          </div>
+
+        </div>
+
+        <div class="fNav">
+          <button class="bBack" onclick="goStep(4)">← Back</button>
+          <button class="bNext" onclick="goStep(6)">Next →</button>
+        </div>
+      </div>
+
+      <div class="fStep" id="s6">
+        <div class="vWrap">
+          <div class="vIcon">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/>
+              <path d="M15 8h2M15 12h2M7 16h10"/>
+            </svg>
+          </div>
+          <div class="gLine" style="margin:0 auto 18px"></div>
+          <h2 class="vTitle">Identity Verification</h2>
+          <p class="vText">As part of our commitment to a safe and trusted professional network, we verify the identity of every driver before onboarding. This quick step protects you, your colleagues, and the clients we serve. Your data is fully encrypted, GDPR-compliant, and never sold or shared with third parties.</p>
+          <a href="KYC.html" class="vBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Verify Your Identity to Complete Registration
+          </a>
+          <div class="secBadges">
+            <div class="secBadge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>256-bit SSL</div>
+            <div class="secBadge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>GDPR Compliant</div>
+            <div class="secBadge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Data Never Sold</div>
+          </div>
+        </div>
+        <div class="fNav">
+          <button class="bBack" onclick="goStep(5)">← Back</button>
+          <button class="bNext" disabled style="opacity:.3;cursor:not-allowed">Submit ✓</button>
+        </div>
+      </div>
+
+    </div></div>
+</div><script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* CURSOR */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;gsap.to(cur,{x:mx,y:my,duration:.08})});
+(function tick(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(tick)})();
+function curHover(on){
+  cur.style.width=on?'13px':'8px';cur.style.height=on?'13px':'8px';
+  cur.style.background=on?'#E8C96A':'var(--gold)';
+  curR.style.width=on?'50px':'34px';curR.style.height=on?'50px':'34px';
+}
+document.querySelectorAll('button,a,.licCard,.bookSlot,.qOpt,select').forEach(el=>{
+  el.addEventListener('mouseenter',()=>curHover(true));
+  el.addEventListener('mouseleave',()=>curHover(false));
+});
+
+/* HERO */
+const panels=document.querySelectorAll('.panel'),dots=document.querySelectorAll('.pDot');
+let curP=-1;
+function showPanel(idx,animate){
+  if(idx===curP)return;
+  panels.forEach((p,i)=>{
+    const els=[p.querySelector('.pTag'),p.querySelector('.pTitle'),p.querySelector('.pSub'),p.querySelector('.pFeats'),p.querySelector('.joinBtn')].filter(Boolean);
+    if(i===idx){p.classList.add('active');if(animate)gsap.fromTo(els,{opacity:0,y:26},{opacity:1,y:0,duration:.7,stagger:.1,ease:'power2.out'});else gsap.set(els,{opacity:1,y:0});}
+    else{p.classList.remove('active');gsap.set(els,{opacity:0,y:26});}
+  });
+  dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+  curP=idx;
+}
+showPanel(0,false);
+
+window.addEventListener('scroll',()=>{
+  const hEl=document.getElementById('heroScroll'),maxS=hEl.offsetHeight-window.innerHeight;
+  if(window.scrollY>maxS+50)return;
+  showPanel(Math.min(Math.floor(Math.min(window.scrollY/maxS,1)*panels.length),panels.length-1),true);
+});
+
+/* FORM */
+let curStep=1,selLic=[],selSlotVal=null,qAns=[null,null];
+function openForm(){
+  document.getElementById('formModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  gsap.from(['.fHead','.fProg','.fBody'],{opacity:0,y:18,duration:.5,stagger:.1,ease:'power2.out'});
+}
+function closeForm(){
+  document.getElementById('formModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function goStep(n){
+  document.getElementById('s'+curStep).classList.remove('active');
+  document.querySelectorAll('.pStep').forEach((el,i)=>{
+    el.classList.remove('on','done');
+    if(i+1<n)el.classList.add('done');
+    if(i+1===n)el.classList.add('on');
+  });
+  curStep=n;
+  document.getElementById('s'+n).classList.add('active');
+  document.getElementById('formModal').scrollTop=0;
+  if(n===3)buildQuiz();
+}
+
+/* Step 1 */
+function v1(){
+  let ok=true;
+  const name=document.getElementById('fName').value.trim();
+  const age=document.getElementById('fAge').value.trim();
+  const email=document.getElementById('fEmail').value.trim();
+  const country=document.getElementById('fCountry').value;
+  const city=document.getElementById('fCity').value.trim();
+  const setE=(id,inp,show)=>{document.getElementById(id).classList.toggle('show',show);document.getElementById(inp).classList.toggle('err',show);if(show)ok=false;};
+  setE('eN','fName',name.length<3);
+  const an=parseInt(age);setE('eA','fAge',!age||isNaN(an)||an<18||an>65);
+  setE('eE','fEmail',!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  setE('eCo','fCountry',!country);
+  setE('eCi','fCity',city.length<2);
+  if(ok)goStep(2);
+}
+document.getElementById('fAge').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');});
+
+/* City toast */
+let cityTimer=null;
+document.getElementById('fCity').addEventListener('input',function(){
+  const v=this.value.trim();
+  if(v.length>=2){
+    this.classList.add('ok-field');this.classList.remove('err');
+    clearTimeout(cityTimer);
+    showCityToast();
+    cityTimer=setTimeout(hideCityToast,5000);
+  } else {
+    this.classList.remove('ok-field');
+    clearTimeout(cityTimer);
+    hideCityToast();
+  }
+});
+function showCityToast(){
+  const el=document.getElementById('cityToast');
+  gsap.killTweensOf(el);
+  gsap.to(el,{opacity:1,scale:1,duration:.42,ease:'back.out(1.6)'});
+}
+function hideCityToast(){
+  const el=document.getElementById('cityToast');
+  gsap.killTweensOf(el);
+  gsap.to(el,{opacity:0,scale:.88,duration:.35,ease:'power2.in'});
+}
+
+/* Step 2 */
+function toggleLic(el){
+  el.classList.toggle('sel');
+  const l=el.dataset.l;
+  if(el.classList.contains('sel')){if(!selLic.includes(l))selLic.push(l);}
+  else selLic=selLic.filter(x=>x!==l);
+}
+function v2(){
+  if(!selLic.length){document.getElementById('eL').classList.add('show');return;}
+  document.getElementById('eL').classList.remove('show');
+  goStep(3);
+}
+
+/* Quiz */
+const QDB={
+  A:[
+    {q:"You're riding at 80 km/h on a wet road when a car suddenly pulls out from a side street 25 metres ahead. What is your safest immediate response?",
+     opts:[{t:"Brake as hard as possible to stop before reaching the car.",c:false},{t:"Smoothly release the throttle, apply progressive braking, and steer toward available space.",c:true},{t:"Swerve sharply left without checking your mirrors.",c:false}]},
+    {q:"During an express delivery, your GPS routes you through a pedestrian zone. The package must arrive within 10 minutes. What do you do?",
+     opts:[{t:"Enter the zone slowly — it's short and unlikely to be monitored.",c:false},{t:"Find an alternative route. Pedestrian zones are prohibited regardless of urgency.",c:true},{t:"Call the recipient to meet you at the edge of the zone.",c:false}]}
+  ],
+  B:[
+    {q:"A VIP passenger asks you to exceed the speed limit because they are late for an important meeting. How do you respond?",
+     opts:[{t:"Comply — the passenger's satisfaction is the top priority.",c:false},{t:"Politely decline, explain that safety and your licence come first, and find the fastest legal route.",c:true},{t:"Exceed the limit only on clear highway sections.",c:false}]},
+    {q:"A passenger offers you a 5-star review in exchange for allowing them to eat a full meal in the vehicle, against company policy. What do you do?",
+     opts:[{t:"Allow it — one exception won't matter and ratings count.",c:false},{t:"Politely decline and explain that you must follow company guidelines regardless of the rating.",c:true},{t:"Stay silent and allow it just this once.",c:false}]}
+  ],
+  C:[
+    {q:"Your fully loaded truck (38 tons) approaches a steep 8% downhill gradient. What is the correct driving technique?",
+     opts:[{t:"Apply the service brake continuously to hold a steady descent speed.",c:false},{t:"Engage a lower gear before the descent and use engine braking, applying brakes only in short intervals if needed.",c:true},{t:"Accelerate slightly at the top to build momentum before braking at the bottom.",c:false}]},
+    {q:"After 4.5 hours of driving, you feel early signs of fatigue but your destination is only 30 minutes away. What is the legally correct action in Europe?",
+     opts:[{t:"Continue driving — 30 minutes is acceptable with windows down and music on.",c:false},{t:"Pull over at the next safe area and take the mandatory minimum 45-minute rest break.",c:true},{t:"Drink strong coffee and reduce your speed slightly.",c:false}]}
+  ],
+  D:[
+    {q:"An aggressive passenger refuses to pay the fare and becomes verbally abusive. You have 28 other passengers on board. What is the correct response?",
+     opts:[{t:"Stop the bus immediately and refuse to move until the passenger pays or exits.",c:false},{t:"Stop safely at the next designated stop, calmly request the passenger to exit, and contact dispatch or authorities if needed.",c:true},{t:"Ignore the passenger and continue — the safety of all others comes first.",c:false}]},
+    {q:"Driving a night charter at 01:00, you notice your eyelids becoming heavy. You are 45 minutes from the destination. What should you do?",
+     opts:[{t:"Ask a nearby passenger to talk to you to stay alert.",c:false},{t:"Immediately find a safe place to stop, inform dispatch, and rest before resuming the journey.",c:true},{t:"Speed up slightly to reduce the total driving time.",c:false}]}
+  ]
+};
+function buildQuiz(){
+  const box=document.getElementById('quizBox');box.innerHTML='';
+  qAns=[null,null];
+  document.getElementById('qNext').disabled=true;
+  const pool=selLic.length>=2?[selLic[0],selLic[1]]:[selLic[0],selLic[0]];
+  const qs=pool.map((l,i)=>({...QDB[l][i%QDB[l].length],l}));
+  qs.forEach((q,qi)=>{
+    const d=document.createElement('div');d.className='qBox';d.dataset.qi=qi;
+    d.innerHTML=`<div class="qNum">Question ${qi+1} of 2 · License ${q.l}</div>
+    <div class="qText">${q.q}</div>
+    <div class="qOpts">${q.opts.map((o,oi)=>`
+      <div class="qOpt" data-qi="${qi}" data-oi="${oi}" data-c="${o.c}" onclick="pickAns(this,${qi},${oi},${o.c})">
+        <span class="oLetter">${String.fromCharCode(65+oi)}</span><span>${o.t}</span>
+      </div>`).join('')}</div>`;
+    box.appendChild(d);
+  });
+  gsap.from('.qBox',{opacity:0,y:18,duration:.5,stagger:.14,ease:'power2.out'});
+}
+function pickAns(el,qi,oi,isOk){
+  const qEl=el.closest('.qBox');
+  if(qEl.dataset.done)return;
+  qEl.dataset.done='1';qAns[qi]=oi;
+  qEl.querySelectorAll('.qOpt').forEach(o=>{o.classList.add('ans');if(o.dataset.c==='true')o.classList.add('ok');});
+  if(!isOk){el.classList.add('no');showFocusAlert();}else el.classList.add('ok');
+  if(qAns.every(a=>a!==null))document.getElementById('qNext').disabled=false;
+}
+function showFocusAlert(){
+  const a=document.getElementById('focusAlert');
+  gsap.killTweensOf(a);
+  gsap.fromTo(a,{opacity:0,scale:.8},{opacity:1,scale:1,duration:.32,ease:'back.out(1.6)',
+    onComplete:()=>gsap.to(a,{opacity:0,duration:.4,delay:2.6})});
+}
+function v3(){if(qAns.every(a=>a!==null))goStep(4);}
+
+/* Booking */
+function selSlot(el){
+  document.querySelectorAll('.bookSlot').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');selSlotVal=el.dataset.slot;
+  document.getElementById('eB').classList.remove('show');
+}
+function v4(){
+  if(!selSlotVal){document.getElementById('eB').classList.add('show');return;}
+  goStep(5);
+}
+
+/* GSAP Icons Animation for Benefits Cards */
+document.querySelectorAll('.btCard').forEach(card => {
+  const icon = card.querySelector('.gsap-icon');
+  if (!icon) return;
+  
+  // حركة طفو مستمرة وهادئة
+  gsap.to(icon, { y: -3, duration: 1.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+  // تأثيرات مخصصة عند تمرير الماوس لكل أيقونة
+  card.addEventListener('mouseenter', () => {
+    if (icon.classList.contains('car-icon')) {
+      gsap.fromTo(icon, { x: -4 }, { x: 4, duration: 0.3, ease: "power2.out", yoyo: true, repeat: 1 });
+    } else if (icon.classList.contains('cal-icon')) {
+      gsap.fromTo(icon, { rotation: -12 }, { rotation: 12, duration: 0.25, ease: "power1.inOut", yoyo: true, repeat: 1 });
+    } else if (icon.classList.contains('money-icon')) {
+      gsap.fromTo(icon, { scale: 0.85 }, { scale: 1.15, duration: 0.3, ease: "back.out(1.7)", yoyo: true, repeat: 1 });
+    } else if (icon.classList.contains('shield-icon')) {
+      gsap.fromTo(icon, { scale: 0.9, y: 0 }, { scale: 1.1, y: -5, duration: 0.3, ease: "power2.out", yoyo: true, repeat: 1 });
+    }
+  });
+});
+</script>
+</body>
+</html>
